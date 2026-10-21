@@ -12,7 +12,11 @@
 {% endblock extra_head %}
 {% block content %}
         <!-- Page Header-->
-        <header class="masthead" style="background-image: url('{% static 'assets/img/post-bg.jpg' %}')">
+        <header class="masthead">
+            <picture>
+                <source type="image/webp" sizes="100vw" srcset="{% static 'assets/img/post-bg-800.webp' %} 800w, {% static 'assets/img/post-bg-1200.webp' %} 1200w, {% static 'assets/img/post-bg-1600.webp' %} 1600w" />
+                <img src="{% static 'assets/img/post-bg-fallback.jpg' %}" alt="" width="1200" height="799" fetchpriority="high" decoding="async" />
+            </picture>
             <div class="container position-relative px-4 px-lg-5">
                 <div class="row gx-4 gx-lg-5 justify-content-center">
                     <div class="col-md-10 col-lg-8 col-xl-7">
@@ -40,7 +44,7 @@
                 <div class="row gx-4 gx-lg-5 justify-content-center">
                     <div class="col-md-10 col-lg-8 col-xl-7">
                         {% if post.featured_image %}
-                        <img class="img-fluid rounded mb-4" src="{{ post.featured_image.url }}" alt="" />
+                        <img class="img-fluid featured-image rounded mb-4" src="{{ post.featured_image.url }}" alt="" />
                         {% endif %}
                         <div class="post-body">
                             {{ post.content|linebreaks }}

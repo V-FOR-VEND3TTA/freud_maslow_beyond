@@ -9,7 +9,11 @@
 {% endblock meta_tags %}
 {% block content %}
         <!-- Page Header-->
-        <header class="masthead" style="background-image: url({% static 'assets/img/about-bg.jpg' %})">
+        <header class="masthead">
+            <picture>
+                <source type="image/webp" sizes="100vw" srcset="{% static 'assets/img/about-bg-800.webp' %} 800w, {% static 'assets/img/about-bg-1200.webp' %} 1200w, {% static 'assets/img/about-bg-1600.webp' %} 1600w" />
+                <img src="{% static 'assets/img/about-bg-fallback.jpg' %}" alt="" width="1200" height="948" fetchpriority="high" decoding="async" />
+            </picture>
             <div class="container position-relative px-4 px-lg-5">
                 <div class="row gx-4 gx-lg-5 justify-content-center">
                     <div class="col-md-10 col-lg-8 col-xl-7">
