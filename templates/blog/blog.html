@@ -1,142 +1,61 @@
-{% extends 'blog/base.html' %}
-
-{% block title %}Blog Posts | {{ block.super }}{% endblock %}
-
+{% extends "blog/base.html" %}
+{% block title %}Articles | Freud, Maslow, &amp; Beyond{% endblock title %}
+{% block meta_tags %}
+<meta name="description" content="{{ meta_description }}" />
+<meta property="og:title" content="Articles | Freud, Maslow, &amp; Beyond" />
+<meta property="og:description" content="{{ meta_description }}" />
+<meta property="og:type" content="website" />
+{% endblock meta_tags %}
 {% block content %}
-<div class="container mt-5">
-    <div class="row">
-        <!-- Main Content Area -->
-        <div class="col-lg-8">
-            <h1 class="mb-4">Latest Blog Posts</h1>
-            
-            <!-- Featured Post (optional) -->
-            {% if featured_post %}
-            <div class="card mb-4 featured-post">
-                {% if featured_post.featured_image %}
-                <img src="{{ featured_post.featured_image.url }}" class="card-img-top" alt="{{ featured_post.title }}">
-                {% endif %}
-                <div class="card-body">
-                    <div class="small text-muted mb-2">
-                        {{ featured_post.created_at|date:"F d, Y" }} • {{ featured_post.author.username }}
-                    </div>
-                    <h2 class="card-title">{{ featured_post.title }}</h2>
-                    <p class="card-text">{{ featured_post.excerpt|default:featured_post.content|truncatewords:30 }}</p>
-                    <a href="{% url 'post_detail' featured_post.id %}" class="btn btn-primary">Read More →</a>
-                </div>
-            </div>
-            <hr class="mb-4">
-            {% endif %}
+<div class="container px-4 px-lg-5 my-5">
+    <div class="row gx-4 gx-lg-5 justify-content-center">
+        <div class="col-md-10 col-lg-8 col-xl-7">
+            <h1 class="mb-2">Articles</h1>
+            <p class="lead text-muted mb-4">Psychology, motivation and human behaviour — the thinkers, the ideas, the evidence and the questions.</p>
 
-            <!-- Blog Posts List -->
             {% for post in posts %}
-            <div class="card mb-4 post-item">
-                <div class="card-body">
-                    <div class="row">
-                        {% if post.featured_image %}
-                        <div class="col-md-4">
-                            <img src="{{ post.featured_image.url }}" class="img-fluid rounded" alt="{{ post.title }}">
-                        </div>
-                        <div class="col-md-8">
-                        {% else %}
-                        <div class="col-12">
-                        {% endif %}
-                            <div class="small text-muted mb-2">
-                                {{ post.created_at|date:"F d, Y" }} • {{ post.author.username }}
-                                {% if post.category %}
-                                <span class="badge bg-secondary ms-2">{{ post.category.name }}</span>
-                                {% endif %}
-                            </div>
-                            <h2 class="card-title h4">{{ post.title }}</h2>
-                            <p class="card-text">{{ post.excerpt|default:post.content|truncatewords:25 }}</p>
-                            <a href="{% url 'post_detail' post.id %}" class="btn btn-outline-primary btn-sm">Read More →</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <!-- Article preview-->
+            <article class="post-preview mb-4 pb-4 border-bottom">
+                <a href="{{ post.get_absolute_url }}">
+                    <h2 class="post-title h4">{{ post.title }}</h2>
+                    {% if post.excerpt %}<h3 class="post-subtitle h6 text-muted fw-normal">{{ post.excerpt }}</h3>{% endif %}
+                </a>
+                <p class="post-meta small text-muted mb-0">
+                    Posted by {{ post.author.get_full_name|default:post.author.username }} on {{ post.created_at|date:"F d, Y" }}
+                </p>
+            </article>
             {% empty %}
+            <!-- Empty state-->
             <div class="alert alert-info">
-                No blog posts available yet. Check back soon!
+                No articles published yet. New writing will appear here soon.
             </div>
             {% endfor %}
 
-            <!-- Pagination -->
-            {% if is_paginated %}
-            <nav aria-label="Blog pagination">
+            {% if page_obj.paginator.num_pages > 1 %}
+            <!-- Pagination-->
+            <nav aria-label="Article pagination">
                 <ul class="pagination justify-content-center">
                     {% if page_obj.has_previous %}
                     <li class="page-item">
-                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}" rel="prev">&larr; Newer</a>
                     </li>
-                    {% endif %}
-                    
-                    {% for num in page_obj.paginator.page_range %}
-                    {% if page_obj.number == num %}
-                    <li class="page-item active"><a class="page-link" href="#">{{ num }}</a></li>
                     {% else %}
-                    <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                    <li class="page-item disabled"><span class="page-link">&larr; Newer</span></li>
                     {% endif %}
-                    {% endfor %}
-                    
+                    <li class="page-item disabled">
+                        <span class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+                    </li>
                     {% if page_obj.has_next %}
                     <li class="page-item">
-                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}" rel="next">Older &rarr;</a>
                     </li>
+                    {% else %}
+                    <li class="page-item disabled"><span class="page-link">Older &rarr;</span></li>
                     {% endif %}
                 </ul>
             </nav>
             {% endif %}
         </div>
-
-        <!-- Sidebar Widgets -->
-        <div class="col-lg-4">
-            <!-- Search Widget -->
-            <div class="card mb-4">
-                <div class="card-header">Search</div>
-                <div class="card-body">
-                    <form method="get" action="{% url 'blog_search' %}">
-                        <div class="input-group">
-                            <input class="form-control" type="text" name="q" placeholder="Search posts..." aria-label="Search posts..." aria-describedby="button-search">
-                            <button class="btn btn-primary" id="button-search" type="submit">Go!</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <!-- Categories Widget -->
-            <div class="card mb-4">
-                <div class="card-header">Categories</div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <ul class="list-unstyled mb-0">
-                                {% for category in categories %}
-                                <li>
-                                    <a href="{% url 'category_posts' category.slug %}">{{ category.name }} ({{ category.post_count }})</a>
-                                </li>
-                                {% empty %}
-                                <li>No categories yet</li>
-                                {% endfor %}
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Recent Posts Widget -->
-            <div class="card mb-4">
-                <div class="card-header">Recent Posts</div>
-                <div class="card-body">
-                    <ul class="list-unstyled">
-                        {% for recent_post in recent_posts %}
-                        <li class="mb-2">
-                            <a href="{% url 'post_detail' recent_post.id %}">{{ recent_post.title }}</a>
-                            <small class="text-muted d-block">{{ recent_post.created_at|timesince }} ago</small>
-                        </li>
-                        {% endfor %}
-                    </ul>
-                </div>
-            </div>
-        </div>
     </div>
 </div>
-{% endblock %}
+{% endblock content %}

@@ -1,8 +1,12 @@
 {% extends "blog/base.html" %}
 {% load static %}
-    <meta name="description" content="" />
-    <meta name="author" content="" />
-    <title>{% block title %}Freud, Maslow & Beyond | About Us {% endblock title %}</title>
+{% block title %}About | Freud, Maslow, &amp; Beyond{% endblock title %}
+{% block meta_tags %}
+<meta name="description" content="{{ meta_description }}" />
+<meta property="og:title" content="About | Freud, Maslow, &amp; Beyond" />
+<meta property="og:description" content="{{ meta_description }}" />
+<meta property="og:type" content="website" />
+{% endblock meta_tags %}
 {% block content %}
         <!-- Page Header-->
         <header class="masthead" style="background-image: url({% static 'assets/img/about-bg.jpg' %})">
@@ -10,8 +14,8 @@
                 <div class="row gx-4 gx-lg-5 justify-content-center">
                     <div class="col-md-10 col-lg-8 col-xl-7">
                         <div class="page-heading">
-                            <h1>About Us</h1>
-                            <span class="subheading">This is what we do.</span>
+                            <h1>About</h1>
+                            <span class="subheading">Make the study of human behaviour easier to explore without making it simplistic.</span>
                         </div>
                     </div>
                 </div>
@@ -22,9 +26,35 @@
             <div class="container px-4 px-lg-5">
                 <div class="row gx-4 gx-lg-5 justify-content-center">
                     <div class="col-md-10 col-lg-8 col-xl-7">
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Saepe nostrum ullam eveniet pariatur voluptates odit, fuga atque ea nobis sit soluta odio, adipisci quas excepturi maxime quae totam ducimus consectetur?</p>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eius praesentium recusandae illo eaque architecto error, repellendus iusto reprehenderit, doloribus, minus sunt. Numquam at quae voluptatum in officia voluptas voluptatibus, minus!</p>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aut consequuntur magnam, excepturi aliquid ex itaque esse est vero natus quae optio aperiam soluta voluptatibus corporis atque iste neque sit tempora!</p>
+                        <h2 class="section-heading">What this is</h2>
+                        <p>Freud, Maslow, &amp; Beyond is an independent educational publishing project about psychology, motivation and human behaviour. It connects influential thinkers, psychological theories, contemporary research and the practical questions people actually ask about human experience.</p>
+                        <p>The goal is to help readers understand not only what an idea claims, but why it matters, what supports it, where it falls short, and how it connects to other ideas.</p>
+
+                        <h2 class="section-heading">What this is not</h2>
+                        <p>This site is <strong>not a clinical service</strong>, not a substitute for professional psychological care, not generic self-help, and not a marketing vehicle for any other business. Nothing published here is medical or mental-health advice. If you are struggling, please speak to a qualified professional.</p>
+
+                        <h2 class="section-heading">Who it's for</h2>
+                        <p>Curious readers who want accessible explanations of human behaviour; students and lifelong learners; and professionals exploring motivation, decision-making and human development — anyone who wants to examine influential theories beyond simplified social-media summaries. Advanced readers will find credible sources and routes into deeper reading.</p>
+
+                        <h2 class="section-heading">Editorial principles</h2>
+                        <p>Every substantive article aims to:</p>
+                        <ul>
+                            <li>Answer a clearly defined reader question.</li>
+                            <li>Explain the idea in plain language.</li>
+                            <li>Establish the relevant historical and intellectual context.</li>
+                            <li>Cite reliable sources.</li>
+                            <li>Distinguish evidence, interpretation, debate and speculation.</li>
+                            <li>Present significant limitations and competing views fairly.</li>
+                            <li>Offer further reading and useful internal links.</li>
+                            <li>Include publication and review dates.</li>
+                        </ul>
+                        <p>Quotations, research findings and claims of scientific consensus are never invented. Material errors are corrected transparently, and articles carry an "Updated" date when they are revised.</p>
+
+                        <h2 class="section-heading">Privacy</h2>
+                        <p>The newsletter sign-up stores only your email address and the date you subscribed, used solely to send new articles. No advertising trackers or third-party analytics run on this site. You can ask to have your address removed at any time via the <a href="{% url 'contact' %}">contact page</a>.</p>
+
+                        <h2 class="section-heading">Get in touch</h2>
+                        <p>Questions, corrections, feedback or collaboration ideas are all welcome — <a href="{% url 'contact' %}">send a message</a>.</p>
                     </div>
                 </div>
             </div>

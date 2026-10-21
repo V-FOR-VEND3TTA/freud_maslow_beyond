@@ -10797,3 +10797,24 @@ header.masthead .post-heading .meta a {
   }
 }
 
+
+/* Accessibility additions (WCAG 2.2 AA target, gate G4) */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 1200;
+}
+.skip-link:focus {
+  left: 0;
+  padding: 0.75rem 1.25rem;
+  background: #0085A1;
+  color: #fff;
+}
+:focus-visible {
+  outline: 3px solid #0085A1;
+  outline-offset: 2px;
+}
+main:focus {
+  outline: none;
+}

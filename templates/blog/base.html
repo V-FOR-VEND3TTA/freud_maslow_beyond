@@ -4,9 +4,16 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <meta name="description" content="" />
-        <meta name="author" content="" />
-        <title>{% block title %}Freud, Maslow & Beyond{% endblock title %}</title>
+        <title>{% block title %}Freud, Maslow, &amp; Beyond{% endblock title %}</title>
+        {% block meta_tags %}
+        <meta name="description" content="{{ meta_description|default:'An independent educational publishing project about psychology, motivation and human behaviour.' }}" />
+        {% endblock meta_tags %}
+        <meta name="author" content="George Hlongwane" />
+        <meta property="og:site_name" content="Freud, Maslow, &amp; Beyond" />
+        {% block canonical %}
+        <link rel="canonical" href="{{ request.build_absolute_uri }}" />
+        {% endblock canonical %}
+        {% block extra_head %}{% endblock extra_head %}
         <link rel="icon" type="image/x-icon" href="{% static 'assets/favicon.ico' %}" />
         <!-- Font Awesome icons (free version)-->
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" rel="stylesheet" crossorigin="anonymous">
@@ -17,59 +24,61 @@
         <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
     </head>
     <body>
+        <a class="skip-link" href="#main-content">Skip to main content</a>
         <!-- Navigation-->
         <nav class="navbar navbar-expand-lg navbar-light" id="mainNav">
             <div class="container px-4 px-lg-5">
-                <a class="navbar-brand" href="{% url 'index' %}">Freud, Maslow, & Beyond</a>
+                <a class="navbar-brand" href="{% url 'index' %}">Freud, Maslow, &amp; Beyond</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                     Menu
                     <i class="fas fa-bars"></i>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarResponsive">
                     <ul class="navbar-nav ms-auto py-4 py-lg-0">
-                        <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'index' %}">Home</a></li>
-                        <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'about' %}">About</a></li>
-                        <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'blog' %}">Blog</a></li>
-                        <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'contact' %}">Contact</a></li>
+                        <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'index' %}" {% if request.resolver_match.url_name == 'index' %}aria-current="page"{% endif %}>Home</a></li>
+                        <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'about' %}" {% if request.resolver_match.url_name == 'about' %}aria-current="page"{% endif %}>About</a></li>
+                        <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'blog' %}" {% if request.resolver_match.url_name == 'blog' %}aria-current="page"{% endif %}>Articles</a></li>
+                        <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'contact' %}" {% if request.resolver_match.url_name == 'contact' %}aria-current="page"{% endif %}>Contact</a></li>
                     </ul>
                 </div>
             </div>
         </nav>
+        {% if messages %}
+        <div class="container px-4 px-lg-5 mt-3" role="status">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags|default:'info' }} mb-2" role="alert">{{ message }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        <main id="main-content" tabindex="-1">
         {% block content %}
-        
+
         {% endblock content %}
+        </main>
         <!-- Footer-->
         <footer class="border-top">
             <div class="container px-4 px-lg-5">
                 <div class="row gx-4 gx-lg-5 justify-content-center">
-                    <div class="col-md-10 col-lg-8 col-xl-7">
-                        <ul class="list-inline text-center">
-                            <li class="list-inline-item">
-                                <a href="#!">
-                                    <span class="fa-stack fa-lg">
-                                        <i class="fas fa-circle fa-stack-2x"></i>
-                                        <i class="fab fa-x-twitter fa-stack-1x fa-inverse"></i>
-                                    </span>
-                                </a>
-                            </li>
-                            <li class="list-inline-item">
-                                <a href="#!">
-                                    <span class="fa-stack fa-lg">
-                                        <i class="fas fa-circle fa-stack-2x"></i>
-                                        <i class="fab fa-facebook-f fa-stack-1x fa-inverse"></i>
-                                    </span>
-                                </a>
-                            </li>
-                            <li class="list-inline-item">
-                                <a href="#!">
-                                    <span class="fa-stack fa-lg">
-                                        <i class="fas fa-circle fa-stack-2x"></i>
-                                        <i class="fab fa-linkedin fa-stack-1x fa-inverse"></i>
-                                    </span>
-                                </a>
-                            </li>
-                        </ul>
-                        <div class="small text-center text-muted fst-italic">Copyright &copy; Freud, Maslow & Beyond {% now "Y" %}</div>
+                    <div class="col-md-10 col-lg-8 col-xl-7 text-center">
+                        <p class="mb-1 fw-bold">Freud, Maslow, &amp; Beyond</p>
+                        <p class="small text-muted mb-3">New articles by email — nothing else. We store only your address, use it solely to send new writing, and will remove it on request via the <a href="{% url 'contact' %}">contact page</a>.</p>
+                        <form class="row g-2 justify-content-center mb-4" method="post" action="{% url 'newsletter_subscribe' %}">
+                            {% csrf_token %}
+                            <div class="col-8 col-sm-5">
+                                <label class="visually-hidden" for="newsletter-email">Email address</label>
+                                <input class="form-control" type="email" id="newsletter-email" name="email" placeholder="Email address" autocomplete="email" required />
+                            </div>
+                            <div class="col-auto">
+                                <button class="btn btn-primary text-uppercase" type="submit">Subscribe</button>
+                            </div>
+                        </form>
+                        <div class="small text-muted fst-italic">
+                            <a href="{% url 'about' %}">About &amp; editorial principles</a>
+                            &middot;
+                            <a href="{% url 'contact' %}">Contact</a>
+                            <br />
+                            Copyright &copy; {% now "Y" %} Freud, Maslow, &amp; Beyond
+                        </div>
                     </div>
                 </div>
             </div>
